@@ -218,9 +218,9 @@ void GBTClient::process() {
 	if (_pendingBlocks.size() > 0) {
 		for (const auto &block : _pendingBlocks) {
 			std::lock_guard<std::mutex> lock(_jobMutex);
+			logger.log(Stella::formattedClockTimeNow() + " "s + std::to_string(block.primeCount) + "-tuple found by worker thread "s + std::to_string(block.threadId) + "\n"s, MessageType::BOLD);
+			logger.log("Base prime: "s + block.result.get_str() + "\n"s);
 			for (const auto &job : _currentJobs) {
-				logger.log(Stella::formattedClockTimeNow() + " "s + std::to_string(block.primeCount) + "-tuple found by worker thread "s + std::to_string(block.threadId) + "\n"s, MessageType::BOLD);
-				logger.log("Base prime: "s + block.result.get_str() + "\n"s);
 				if (job.id == block.jobId) { // Sends a pending result via submitblock
 					logger.log("Submitting block with "s + std::to_string(job.txCount) + " transaction(s) (including coinbase)...\n"s, MessageType::BOLD);
 					BlockHeader bh(job.bh);
