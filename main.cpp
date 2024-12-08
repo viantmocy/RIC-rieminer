@@ -348,7 +348,8 @@ int main(int argc, char** argv) {
 			std::vector<uint8_t> scriptPubKey(bech32ToScriptPubKey(configuration.options().payoutAddress));
 			logger.log("Payout address: "s + configuration.options().payoutAddress + "\n"s);
 			if (scriptPubKey.size() == 0) {
-				logger.log("Invalid payout address! Please check it. Note that only Bech32 addresses are supported.\n"s, MessageType::ERROR);
+				logger.log("Invalid payout address! Please check it. Note that only Bech32M addresses are supported.\n"s, MessageType::ERROR);
+				logger.log("If you use a ric1q Address, the Checksum computation has changed. Please upgrade to 24.12+ to see the correct Address.\n"s, MessageType::ERROR);
 				waitForUser();
 				return false;
 			}
