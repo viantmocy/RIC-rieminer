@@ -115,7 +115,7 @@ nlohmann::json GBTClient::_sendRequestToWallet(const std::string &method, const 
 	nlohmann::json jsonObj;
 	if (_curl) {
 		std::string s;
-		const nlohmann::json request{{"method", method}, {"params", params}, {"id", id++}};
+		const nlohmann::json request{{"jsonrpc", "2.0"}, {"method", method}, {"params", params}, {"id", id++}};
 		const std::string requestStr(request.dump());
 		curl_easy_setopt(_curl, CURLOPT_URL, _url.c_str());
 		curl_easy_setopt(_curl, CURLOPT_POSTFIELDSIZE, requestStr.size());
@@ -146,12 +146,15 @@ bool GBTClient::_fetchJob() {
 	nlohmann::json getblocktemplate, getblocktemplateResult;
 	try {
 		getblocktemplate = _sendRequestToWallet("getblocktemplate", {{{"rules", _rules}}});
-		if (getblocktemplate == nullptr)
-			return false;
 		getblocktemplateResult = getblocktemplate["result"];
+		if (getblocktemplateResult == nullptr) {
+			nlohmann::json error(getblocktemplate["error"]);
+			logger.log("GetBlockTemplate Error "s + std::to_string(int(error["code"])) +": "s + std::string(error["message"]) + "\n"s, MessageType::ERROR);
+			return false;
+		}
 	}
 	catch (...) {
-		logger.log("Could not get GetBlockTemplate Data!\n"s, MessageType::ERROR);
+		logger.log("GetBlockTemplate Unknown Error\n"s, MessageType::ERROR);
 		return false;
 	}
 	JobTemplate newJobTemplate;
@@ -234,14 +237,18 @@ void GBTClient::process() {
 						oss << "fd" << std::setfill('0') << std::setw(2) << std::hex << job.txCount % 256 << std::setw(2) << job.txCount/256;
 					oss << job.transactionsHex;
 					try {
-						nlohmann::json submitblockResponse(_sendRequestToWallet("submitblock", {oss.str()}));
-						if (submitblockResponse["result"] == nullptr && submitblockResponse["error"] == nullptr)
+						nlohmann::json submitblock(_sendRequestToWallet("submitblock", {oss.str()})), result(submitblock["result"]), error(submitblock["error"]);
+						if (result == nullptr && error == nullptr)
 							logger.log("Submission accepted :D !\n"s, MessageType::SUCCESS);
-						else
-							logger.log("Submission rejected :| ! Received: " + submitblockResponse.dump() + "\n"s, MessageType::WARNING);
+						else {
+							if (result != nullptr)
+								logger.log("Submission rejected :| ! Reason: "s + std::string(result) + "\n"s, MessageType::WARNING);
+							else
+								logger.log("SubmitBlock Error "s + std::to_string(int(error["code"])) +" :| : "s + std::string(error["message"]) + "\n"s, MessageType::ERROR);
+						}
 					}
 					catch (std::exception &e) {
-						logger.log("Failure submitting block :| !\n"s, MessageType::ERROR);
+						logger.log("Unknown SubmitBlock Error :| !\n"s, MessageType::ERROR);
 						return;
 					}
 					break;

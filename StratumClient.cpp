@@ -12,7 +12,7 @@
 #include "Client.hpp"
 #include "Stella.hpp"
 
-constexpr const char* userAgent("rieMiner/0.93");
+constexpr const char* userAgent("rieMiner/0.94");
 
 static std::array<uint8_t, 32> calculateMerkleRootStratum(const std::vector<std::array<uint8_t, 32>> &merkleBranches) {
 	std::array<uint8_t, 32> merkleRoot{};
@@ -193,7 +193,7 @@ void StratumClient::_processMessage(const std::string &message) {
 			}
 			logger.log("ExtraNonce1    = "s + v8ToHexStr(_extraNonce1) + "\n"s);
 			logger.log("extraNonce2Len = "s + std::to_string(_extraNonce2Len) + "\n"s);
-			const std::string miningAuthorizeMessage("{\"id\": "s + std::to_string(_jsonId++) + ", \"method\": \"mining.authorize\", \"params\": [\""s + _username + "\", \""s + _password + "\"]}\n"s);
+			const std::string miningAuthorizeMessage("{\"jsonrpc\": \"2.0\", \"id\": "s + std::to_string(_jsonId++) + ", \"method\": \"mining.authorize\", \"params\": [\""s + _username + "\", \""s + _password + "\"]}\n"s);
 			send(_socket, miningAuthorizeMessage.c_str(), miningAuthorizeMessage.size(), 0);
 			// logger.logDebug("Sent to pool: "s + miningAuthorizeMessage);
 		}
@@ -302,7 +302,7 @@ void StratumClient::connect() {
 		}
 	}
 	if (_state == UNSUBSCRIBED) {
-		const std::string miningSubscribeMessage("{\"id\": "s + std::to_string(_jsonId++) + ", \"method\": \"mining.subscribe\", \"params\": [\""s + userAgent + "\"]}\n"s);
+		const std::string miningSubscribeMessage("{\"jsonrpc\": \"2.0\", \"id\": "s + std::to_string(_jsonId++) + ", \"method\": \"mining.subscribe\", \"params\": [\""s + userAgent + "\"]}\n"s);
 		send(_socket, miningSubscribeMessage.c_str(), miningSubscribeMessage.size(), 0);
 		logger.logDebug("Sent to pool: "s + miningSubscribeMessage);
 	}
@@ -333,7 +333,7 @@ void StratumClient::process() {
 				if (job.id == share.jobId) {
 					logger.logDebug(Stella::formattedClockTimeNow() + " "s + std::to_string(share.primeCount) + "-share found by worker thread "s + std::to_string(share.threadId) + "\n"s);
 					std::ostringstream oss;
-					oss << "{\"id\": " << std::to_string(_jsonId++) << ", \"method\": \"mining.submit\", \"params\": [\""
+					oss << "{\"jsonrpc\": \"2.0\", \"id\": " << std::to_string(_jsonId++) << ", \"method\": \"mining.submit\", \"params\": [\""
 						<< _username << "\", \""
 						<< job.jobId << "\", \""
 						<< v8ToHexStr(job.extraNonce2) << "\", \""
