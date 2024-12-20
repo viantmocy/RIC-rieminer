@@ -48,10 +48,7 @@ template <class C> inline C reverse(C c) {
 
 inline std::array<uint8_t, 32> sha256(const uint8_t *data, uint32_t len) {
 	std::array<uint8_t, 32> hash;
-	SHA256_CTX sha256;
-	SHA256_Init(&sha256);
-	SHA256_Update(&sha256, data, len);
-	SHA256_Final(hash.data(), &sha256);
+	SHA256(data, len, hash.data());
 	return hash;
 }
 inline std::array<uint8_t, 32> sha256sha256(const uint8_t *data, uint32_t len) {
