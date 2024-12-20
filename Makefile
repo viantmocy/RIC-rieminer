@@ -4,13 +4,13 @@ M4     = m4
 AS     = as
 SED    = sed
 CFLAGS = -Wall -Wextra -std=c++17 -O3 -fno-pie -no-pie
-LIBS   = -lcurl -lcrypto -lgmpxx -lgmp
+LIBS   = -lcurl -lgmpxx -lgmp
 
 all: native
 
 apple_silicon: CXX = clang++
-apple_silicon: CFLAGS += -march=armv8.3-a -target arm64-apple-macos -O3 -I/opt/homebrew/include -I/opt/homebrew/opt/openssl@1.1/include -I/opt/homebrew/opt/gmp/include
-apple_silicon: LIBS := -L/opt/homebrew/opt/openssl@1.1/lib -L/opt/homebrew/opt/gmp/lib -lcurl -lcrypto -lgmpxx -lgmp
+apple_silicon: CFLAGS += -march=armv8.3-a -target arm64-apple-macos -O3 -I/opt/homebrew/include -I/opt/homebrew/opt/gmp/include
+apple_silicon: LIBS := -L/opt/homebrew/opt/gmp/lib -lcurl -lgmpxx -lgmp
 apple_silicon: rieMiner
 
 native: CFLAGS += -march=native -s

@@ -263,7 +263,7 @@ int main(int argc, char** argv) {
 	logger.log("Assembly code by Michael Bell (Rockhawk)\n"s
 	           "G++ "s + std::to_string(__GNUC__) + "."s + std::to_string(__GNUC_MINOR__) + "."s + std::to_string(__GNUC_PATCHLEVEL__) + " - https://gcc.gnu.org/\n"s
 	           "GMP "s + std::to_string(__GNU_MP_VERSION) + "."s + std::to_string(__GNU_MP_VERSION_MINOR) + "."s + std::to_string(__GNU_MP_VERSION_PATCHLEVEL) + " - https://gmplib.org/\n"s
-	           OPENSSL_VERSION_TEXT + " - https://www.openssl.org/\n"s
+	           "PicoSHA2 27fcf69 - https://github.com/okdshin/PicoSHA2\n"s
 	           "Curl "s + LIBCURL_VERSION + " - https://curl.haxx.se/\n"s
 	           "NLohmann Json "s + std::to_string(NLOHMANN_JSON_VERSION_MAJOR) + "."s + std::to_string(NLOHMANN_JSON_VERSION_MINOR) + "."s + std::to_string(NLOHMANN_JSON_VERSION_PATCH) + " - https://json.nlohmann.me/\n"s);
 	logger.hr();

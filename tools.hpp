@@ -11,10 +11,10 @@
 #include <cstring>
 #include <deque>
 #include <filesystem>
-#include <openssl/sha.h>
 #include <random>
 #include <vector>
 
+#include "external/picosha2.h"
 #include "Stella.hpp"
 
 uint8_t rand(uint8_t, uint8_t);
@@ -48,7 +48,7 @@ template <class C> inline C reverse(C c) {
 
 inline std::array<uint8_t, 32> sha256(const uint8_t *data, uint32_t len) {
 	std::array<uint8_t, 32> hash;
-	SHA256(data, len, hash.data());
+	picosha2::hash256(data, data + len, hash.begin(), hash.end());
 	return hash;
 }
 inline std::array<uint8_t, 32> sha256sha256(const uint8_t *data, uint32_t len) {
