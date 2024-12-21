@@ -107,6 +107,7 @@ bool Configuration::parse(const int argc, char** argv, std::string &parsingMessa
 		}
 		else if (key == "Username") _options.username = value;
 		else if (key == "Password") _options.password = value;
+		else if (key == "Cookie") _options.cookie = value;
 		else if (key == "PayoutAddress") _options.payoutAddress = value;
 		else if (key == "Threads") {
 			try {_options.stellaConfig.threads = std::stoi(value);}
@@ -342,8 +343,12 @@ int main(int argc, char** argv) {
 		else
 			logger.log("Pooled mining"s);
 		logger.log(" via host "s + configuration.options().host + ", port "s + std::to_string(configuration.options().port) + "\n"s);
-		logger.log("Username: "s + configuration.options().username + "\n"s);
-		logger.log("Password: <"s + std::to_string(configuration.options().password.size()) + " character(s)>\n"s);
+		if (configuration.options().mode == "Solo" && configuration.options().cookie != "")
+			logger.log("Cookie: "s + configuration.options().cookie + "\n"s);
+		else {
+			logger.log("Username: "s + configuration.options().username + "\n"s);
+			logger.log("Password: <"s + std::to_string(configuration.options().password.size()) + " character(s)>\n"s);
+		}
 		if (configuration.options().mode == "Solo") {
 			std::vector<uint8_t> scriptPubKey(bech32ToScriptPubKey(configuration.options().payoutAddress));
 			logger.log("Payout address: "s + configuration.options().payoutAddress + "\n"s);

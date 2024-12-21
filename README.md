@@ -203,6 +203,7 @@ rieMiner proposes the following Modes depending on what you want to do. Use the 
 * `Port`: port of the Riecoin server (same as rpcport in riecoin.conf for solo mining). Default: 28332 (default RPC port for Riecoin Core);
 * `Username`: username used to connect to the server (same as rpcuser in riecoin.conf for solo mining). Default: empty;
 * `Password`: password used to connect to the server (same as rpcpassword in riecoin.conf for solo mining). Default: empty;
+* `Cookie`: for solo mining, cookie file containing the credentials, overriding `Username` and `Password`. Default: empty/none;
 * `PayoutAddress`: payout address for solo mining. You can use Bech32 "ric1" addresses (only lowercase). Default: a donation address;
 * `Rules`: for solo mining, add consensus rules in the GetBlockTemplate RPC call, each separated by a comma. `segwit` must be present. You should not touch this unless a major Riecoin upgrade is upcoming and it is said to use this option. Default: segwit.
 

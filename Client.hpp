@@ -72,7 +72,8 @@ public:
 class GBTClient : public NetworkedClient {
 	// Options
 	const std::vector<std::string> _rules;
-	const std::string _host, _url, _credentials;
+	const std::string _host, _url, _cookie;
+	std::string _credentials;
 	const std::vector<uint8_t> _scriptPubKey;
 	// Client State Variables
 	CURL *_curl;
@@ -103,6 +104,7 @@ public:
 		_rules(options.rules),
 		_host(options.host),
 		_url("http://" + options.host + ":" + std::to_string(options.port) + "/"),
+		_cookie(options.cookie),
 		_credentials(options.username + ":" + options.password),
 		_scriptPubKey(bech32ToScriptPubKey(options.payoutAddress)),
 		_curl(curl_easy_init()) {}

@@ -204,6 +204,15 @@ bool GBTClient::_fetchJob() {
 
 void GBTClient::connect() {
 	if (!_connected) {
+		if (_cookie != "") {
+			std::ifstream file(_cookie, std::ios::in);
+			if (!file) {
+				logger.log("Could not open Cookie '"s + _cookie + "'!\n"s
+				"Check that the Server is running, that the Cookie does exist at this path, and that this instance of rieMiner can read it.\n"s, MessageType::ERROR);
+				return;
+			}
+			std::getline(file, _credentials);
+		}
 		_currentJobTemplate = JobTemplate();
 		_pendingBlocks = {};
 		process();
