@@ -38,7 +38,7 @@ extern std::string confPath;
 struct Options {
 	Stella::Configuration stellaConfig;
 	uint16_t tupleLengthMin{0U};
-	std::string host{"127.0.0.1"}, username{""}, password{""}, cookie{""}, mode{"Benchmark"}, payoutAddress{"ric1pstellap55ue6keg3ta2qwlxr0h58g66fd7y4ea78hzkj3r4lstrsk4clvn"}, tuplesFile{"Tuples.txt"};
+	std::string host{"127.0.0.1"}, proxy{""}, username{""}, password{""}, cookie{""}, mode{"Benchmark"}, payoutAddress{"ric1pstellap55ue6keg3ta2qwlxr0h58g66fd7y4ea78hzkj3r4lstrsk4clvn"}, tuplesFile{"Tuples.txt"};
 	uint64_t filePrimeTableLimit{0ULL};
 	uint16_t port{28332U};
 	double refreshInterval{30.}, difficulty{1024.}, benchmarkBlockInterval{150.}, benchmarkTimeLimit{960.};

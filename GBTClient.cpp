@@ -118,6 +118,8 @@ nlohmann::json GBTClient::_sendRequestToWallet(const std::string &method, const 
 		const nlohmann::json request{{"jsonrpc", "2.0"}, {"method", method}, {"params", params}, {"id", id++}};
 		const std::string requestStr(request.dump());
 		curl_easy_setopt(_curl, CURLOPT_URL, _url.c_str());
+		if (_proxy != "")
+			curl_easy_setopt(_curl, CURLOPT_PROXY, _proxy.c_str());
 		curl_easy_setopt(_curl, CURLOPT_POSTFIELDSIZE, requestStr.size());
 		curl_easy_setopt(_curl, CURLOPT_POSTFIELDS, requestStr.c_str());
 		curl_easy_setopt(_curl, CURLOPT_WRITEFUNCTION, curlWriteCallback);

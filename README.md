@@ -199,8 +199,9 @@ rieMiner proposes the following Modes depending on what you want to do. Use the 
 
 ### Solo and Pooled Mining options
 
-* `Host`: IP of the Riecoin server. Default: 127.0.0.1 (your computer);
+* `Host`: URL of the Riecoin server. Default: 127.0.0.1 (your computer);
 * `Port`: port of the Riecoin server (same as rpcport in riecoin.conf for solo mining). Default: 28332 (default RPC port for Riecoin Core);
+* `Proxy`: URL of a Proxy (can be suffixed by the port, example `socks5://example.com:1080` - see [Curl Documentation](https://curl.se/libcurl/c/CURLOPT_PROXY.html)), optional. Default: none;
 * `Username`: username used to connect to the server (same as rpcuser in riecoin.conf for solo mining). Default: empty;
 * `Password`: password used to connect to the server (same as rpcpassword in riecoin.conf for solo mining). Default: empty;
 * `Cookie`: for solo mining, cookie file containing the credentials, overriding `Username` and `Password`. Default: empty/none;

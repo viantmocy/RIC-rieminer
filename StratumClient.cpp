@@ -248,6 +248,8 @@ void StratumClient::connect() {
 			return;
 		}
 		curl_easy_setopt(_curl, CURLOPT_URL, (_host + ":" + std::to_string(_port) + "/").c_str());
+		if (_proxy != "")
+			curl_easy_setopt(_curl, CURLOPT_PROXY, _proxy.c_str());
 		curl_easy_setopt(_curl, CURLOPT_CONNECT_ONLY, 1L);
 		CURLcode cc(curl_easy_perform(_curl));
 		if (cc != CURLE_OK) {

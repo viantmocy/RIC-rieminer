@@ -72,7 +72,7 @@ public:
 class GBTClient : public NetworkedClient {
 	// Options
 	const std::vector<std::string> _rules;
-	const std::string _host, _url, _cookie;
+	const std::string _host, _url, _proxy, _cookie;
 	std::string _credentials;
 	const std::vector<uint8_t> _scriptPubKey;
 	// Client State Variables
@@ -103,7 +103,8 @@ public:
 	GBTClient(const Options &options) :
 		_rules(options.rules),
 		_host(options.host),
-		_url("http://" + options.host + ":" + std::to_string(options.port) + "/"),
+		_url(options.host + ":" + std::to_string(options.port)),
+		_proxy(options.proxy),
 		_cookie(options.cookie),
 		_credentials(options.username + ":" + options.password),
 		_scriptPubKey(bech32ToScriptPubKey(options.payoutAddress)),
@@ -121,7 +122,7 @@ public:
 // Client for the Stratum protocol (pooled mining), working for the current Riecoin pools
 class StratumClient : public NetworkedClient {
 	// Options
-	const std::string _username, _password, _host;
+	const std::string _username, _password, _host, _proxy;
 	const uint16_t _port;
 	// Client State Variables
 	CURL *_curl;
@@ -152,7 +153,7 @@ class StratumClient : public NetworkedClient {
 	
 	void _processMessage(const std::string&); // Processes a message received from the pool
 public:
-	StratumClient(const Options &options) : _username(options.username), _password(options.password), _host(options.host), _port(options.port), _curl(curl_easy_init()) {}
+	StratumClient(const Options &options) : _username(options.username), _password(options.password), _host(options.host), _proxy(options.proxy), _port(options.port), _curl(curl_easy_init()) {}
 	void connect(); // Also sends mining.subscribe
 	void process(); // Get messages from the server and calls _processMessage to handle them
 	std::optional<ClientInfo> info() const;

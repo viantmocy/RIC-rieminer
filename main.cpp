@@ -105,6 +105,7 @@ bool Configuration::parse(const int argc, char** argv, std::string &parsingMessa
 			try {_options.port = std::stoi(value);}
 			catch (...) {_options.port = 28332;}
 		}
+		else if (key == "Proxy") _options.proxy = value;
 		else if (key == "Username") _options.username = value;
 		else if (key == "Password") _options.password = value;
 		else if (key == "Cookie") _options.cookie = value;
@@ -343,6 +344,8 @@ int main(int argc, char** argv) {
 		else
 			logger.log("Pooled mining"s);
 		logger.log(" via host "s + configuration.options().host + ", port "s + std::to_string(configuration.options().port) + "\n"s);
+		if (configuration.options().proxy != "")
+			logger.log("Using Proxy: "s + configuration.options().proxy + "\n"s);
 		if (configuration.options().mode == "Solo" && configuration.options().cookie != "")
 			logger.log("Cookie: "s + configuration.options().cookie + "\n"s);
 		else {
