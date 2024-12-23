@@ -186,7 +186,7 @@ void StratumClient::_processMessage(const std::string &message) {
 			}
 			logger.log("ExtraNonce1    = "s + v8ToHexStr(_extraNonce1) + "\n"s);
 			logger.log("extraNonce2Len = "s + std::to_string(_extraNonce2Len) + "\n"s);
-			const std::string miningAuthorizeMessage("{\"jsonrpc\": \"2.0\", \"id\": "s + std::to_string(_jsonId++) + ", \"method\": \"mining.authorize\", \"params\": [\""s + _username + "\", \""s + _password + "\"]}\n"s);
+			const std::string miningAuthorizeMessage("{\"id\": "s + std::to_string(_jsonId++) + ", \"method\": \"mining.authorize\", \"params\": [\""s + _username + "\", \""s + _password + "\"]}\n"s);
 			// logger.logDebug("Sending: "s + miningAuthorizeMessage);
 			size_t bytesSent(0);
 			CURLcode cc(curl_easy_send(_curl, miningAuthorizeMessage.c_str(), miningAuthorizeMessage.size(), &bytesSent));
@@ -267,7 +267,7 @@ void StratumClient::connect() {
 		}
 		logger.log("Host: "s + _host + " -> " + ip + "\n"s);
 		if (_state == UNSUBSCRIBED) {
-			const std::string miningSubscribeMessage("{\"jsonrpc\": \"2.0\", \"id\": "s + std::to_string(_jsonId++) + ", \"method\": \"mining.subscribe\", \"params\": [\""s + userAgent + "\"]}\n"s);
+			const std::string miningSubscribeMessage("{\"id\": "s + std::to_string(_jsonId++) + ", \"method\": \"mining.subscribe\", \"params\": [\""s + userAgent + "\"]}\n"s);
 			size_t bytesSent(0);
 			cc = curl_easy_send(_curl, miningSubscribeMessage.c_str(), miningSubscribeMessage.size(), &bytesSent);
 			logger.logDebug("Sending: "s + miningSubscribeMessage);
@@ -305,7 +305,7 @@ void StratumClient::process() {
 					_shares++;
 					logger.logDebug(Stella::formattedClockTimeNow() + " "s + std::to_string(share.primeCount) + "-share found by worker thread "s + std::to_string(share.threadId) + "\n"s);
 					std::ostringstream oss;
-					oss << "{\"jsonrpc\": \"2.0\", \"id\": " << std::to_string(_jsonId++) << ", \"method\": \"mining.submit\", \"params\": [\""
+					oss << "{\"id\": " << std::to_string(_jsonId++) << ", \"method\": \"mining.submit\", \"params\": [\""
 						<< _username << "\", \""
 						<< job.jobId << "\", \""
 						<< v8ToHexStr(job.extraNonce2) << "\", \""
