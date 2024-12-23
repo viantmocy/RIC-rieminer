@@ -1,12 +1,5 @@
 // (c) 2018-present Pttn (https://riecoin.xyz/rieMiner)
 
-#include <fcntl.h>
-#ifdef _WIN32
-	#include <winsock2.h>
-#else
-	#include <arpa/inet.h>
-	#include <netdb.h>
-#endif
 #include <nlohmann/json.hpp>
 
 #include "Client.hpp"
@@ -194,8 +187,11 @@ void StratumClient::_processMessage(const std::string &message) {
 			logger.log("ExtraNonce1    = "s + v8ToHexStr(_extraNonce1) + "\n"s);
 			logger.log("extraNonce2Len = "s + std::to_string(_extraNonce2Len) + "\n"s);
 			const std::string miningAuthorizeMessage("{\"jsonrpc\": \"2.0\", \"id\": "s + std::to_string(_jsonId++) + ", \"method\": \"mining.authorize\", \"params\": [\""s + _username + "\", \""s + _password + "\"]}\n"s);
-			send(_socket, miningAuthorizeMessage.c_str(), miningAuthorizeMessage.size(), 0);
-			// logger.logDebug("Sent to pool: "s + miningAuthorizeMessage);
+			// logger.logDebug("Sending: "s + miningAuthorizeMessage);
+			size_t bytesSent(0);
+			CURLcode cc(curl_easy_send(_curl, miningAuthorizeMessage.c_str(), miningAuthorizeMessage.size(), &bytesSent));
+			if (cc != CURLE_OK)
+				logger.log("Could not send Authorize Message: Curl Error "s + std::to_string(cc) + " - "s + curl_easy_strerror(cc) + "\n"s, MessageType::ERROR);
 		}
 		else if (_state == SUBSCRIBED) {
 			nlohmann::json jsonResult;
@@ -247,75 +243,50 @@ void StratumClient::connect() {
 		_lastPoolMessageTp = std::chrono::steady_clock::now();
 		_state = UNSUBSCRIBED;
 		_jsonId = 0U;
-#ifdef _WIN32
-		WORD wVersionRequested(MAKEWORD(2, 2));
-		WSADATA wsaData;
-		const int err(WSAStartup(wVersionRequested, &wsaData));
-		if (err != 0) {
-			logger.log("WSAStartup failed with error "s + std::to_string(err) + "\n"s, MessageType::ERROR);
+		if (!_curl) {
+			logger.log("Unknown Curl Error\n"s, MessageType::ERROR);
 			return;
 		}
-#endif
-		hostent* hostInfo = gethostbyname(_host.c_str());
-		if (hostInfo == nullptr) {
-			logger.log("Unable to resolve '"s + _host + "', check the URL.\n"s, MessageType::ERROR);
+		curl_easy_setopt(_curl, CURLOPT_URL, (_host + ":" + std::to_string(_port) + "/").c_str());
+		curl_easy_setopt(_curl, CURLOPT_CONNECT_ONLY, 1L);
+		CURLcode cc(curl_easy_perform(_curl));
+		if (cc != CURLE_OK) {
+			logger.log("Could not connect to Server: Curl Error "s + std::to_string(cc) + " - "s + curl_easy_strerror(cc) + "\n"s, MessageType::ERROR);
 			return;
 		}
-		void** ipListPtr((void**) hostInfo->h_addr_list);
-		uint32_t ip(0xFFFFFFFF);
-		if (ipListPtr[0]) ip = *(uint32_t*) ipListPtr[0];
-		std::ostringstream oss;
-		oss << ((ip >> 0) & 0xFF) << "." << ((ip >> 8) & 0xFF) << "." << ((ip >> 16) & 0xFF) << "." << ((ip >> 24) & 0xFF);
-		logger.log("Host: '"s + _host + " -> " + oss.str() + "\n"s);
-		_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-		if (_socket == -1) {
-#ifdef _WIN32
-			logger.log("Could not create endpoint, error "s + std::to_string(WSAGetLastError()) + "\n"s, MessageType::ERROR);
-#else
-			logger.log("Could not create endpoint: "s + std::strerror(errno) + "\n"s, MessageType::ERROR);
-#endif
+		cc = curl_easy_getinfo(_curl, CURLINFO_ACTIVESOCKET, &_socket);
+		if (cc != CURLE_OK) {
+			logger.log("Could not get Socket File Descriptor: Curl Error "s + std::to_string(cc) + " - "s + curl_easy_strerror(cc) + "\n"s, MessageType::ERROR);
 			return;
 		}
-		struct sockaddr_in addr;
-		memset(&addr, 0, sizeof(sockaddr_in));
-		addr.sin_family = AF_INET;
-		addr.sin_port = htons(_port);
-		addr.sin_addr.s_addr = inet_addr(oss.str().c_str());
-		int result = ::connect(_socket, (sockaddr*) &addr, sizeof(sockaddr_in));
-		if (result != 0) {
-#ifdef _WIN32
-			logger.log("Could not connect to the pool, error "s + std::to_string(WSAGetLastError()) + "\n"s +
-#else
-			logger.log("Could not connect to the pool: "s + std::strerror(errno) + "\n"s +
-#endif
-			"Check the port."s, MessageType::ERROR);
+		char *ip;
+		curl_easy_getinfo(_curl, CURLINFO_PRIMARY_IP, &ip);
+		if (cc != CURLE_OK) {
+			logger.log("Could not get Server IP: Curl Error "s + std::to_string(cc) + " - "s + curl_easy_strerror(cc) + "\n"s, MessageType::ERROR);
 			return;
 		}
-#ifdef _WIN32
-		uint32_t nonBlocking(true), cbRet;
-		if (WSAIoctl(_socket, FIONBIO, &nonBlocking, sizeof(nonBlocking), nullptr, 0, (LPDWORD) &cbRet, nullptr, nullptr) != 0) {
-#else
-		if (fcntl(_socket, F_SETFL, fcntl(_socket, F_GETFL, 0) | O_NONBLOCK) == -1) {
-#endif
-			logger.log("Unable to make the socket non-blocking\n"s, MessageType::ERROR);
-			return;
+		logger.log("Host: "s + _host + " -> " + ip + "\n"s);
+		if (_state == UNSUBSCRIBED) {
+			const std::string miningSubscribeMessage("{\"jsonrpc\": \"2.0\", \"id\": "s + std::to_string(_jsonId++) + ", \"method\": \"mining.subscribe\", \"params\": [\""s + userAgent + "\"]}\n"s);
+			size_t bytesSent(0);
+			cc = curl_easy_send(_curl, miningSubscribeMessage.c_str(), miningSubscribeMessage.size(), &bytesSent);
+			logger.logDebug("Sending: "s + miningSubscribeMessage);
+			if (cc != CURLE_OK) {
+				logger.log("Could not send Subscribe Message: Curl Error "s + std::to_string(cc) + " - "s + curl_easy_strerror(cc) + "\n"s, MessageType::ERROR);
+				return;
+			}
 		}
-	}
-	if (_state == UNSUBSCRIBED) {
-		const std::string miningSubscribeMessage("{\"jsonrpc\": \"2.0\", \"id\": "s + std::to_string(_jsonId++) + ", \"method\": \"mining.subscribe\", \"params\": [\""s + userAgent + "\"]}\n"s);
-		send(_socket, miningSubscribeMessage.c_str(), miningSubscribeMessage.size(), 0);
-		logger.logDebug("Sent to pool: "s + miningSubscribeMessage);
-	}
-	const std::chrono::time_point<std::chrono::steady_clock> timeOutTimer(std::chrono::steady_clock::now());
-	while (!getJob().has_value() || _state != AUTHORIZED) {
-		process();
-		if (Stella::timeSince(timeOutTimer) > 1.) {
-			logger.log("Could not get a first job from the pool!\n"s, MessageType::ERROR);
-			std::lock_guard<std::mutex> lock(_jobMutex);
-			_currentJobTemplate.clientInfo = {};
-			return;
+		const std::chrono::time_point<std::chrono::steady_clock> timeOutTimer(std::chrono::steady_clock::now());
+		while (!getJob().has_value() || _state != AUTHORIZED) {
+			process();
+			if (Stella::timeSince(timeOutTimer) > 1.) {
+				logger.log("Could not get a first job from the pool!\n"s, MessageType::ERROR);
+				std::lock_guard<std::mutex> lock(_jobMutex);
+				_currentJobTemplate.clientInfo = {};
+				return;
+			}
+			std::this_thread::sleep_for(std::chrono::milliseconds(100));
 		}
-		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 	}
 	_connected = true;
 }
@@ -331,6 +302,7 @@ void StratumClient::process() {
 			std::lock_guard<std::mutex> lock(_jobMutex);
 			for (const auto &job : _currentJobs) {
 				if (job.id == share.jobId) {
+					_shares++;
 					logger.logDebug(Stella::formattedClockTimeNow() + " "s + std::to_string(share.primeCount) + "-share found by worker thread "s + std::to_string(share.threadId) + "\n"s);
 					std::ostringstream oss;
 					oss << "{\"jsonrpc\": \"2.0\", \"id\": " << std::to_string(_jsonId++) << ", \"method\": \"mining.submit\", \"params\": [\""
@@ -339,9 +311,13 @@ void StratumClient::process() {
 						<< v8ToHexStr(job.extraNonce2) << "\", \""
 						<< std::setfill('0') << std::setw(16) << std::hex << job.bh.curtime << "\", \""
 						<< v8ToHexStr(reverse(a8ToV8(encodedOffset(share)))) << "\"]}\n";
-					send(_socket, oss.str().c_str(), oss.str().size(), 0);
-					logger.logDebug("Sent to pool: "s + oss.str());
-					_shares++;
+					logger.logDebug("Sending: "s + oss.str());
+					size_t bytesSent(0);
+					CURLcode cc(curl_easy_send(_curl, oss.str().c_str(), oss.str().size(), &bytesSent));
+					if (cc != CURLE_OK) {
+						logger.log("Could not send Share: Curl Error "s + std::to_string(cc) + " - "s + curl_easy_strerror(cc) + "\n"s, MessageType::ERROR);
+						_rejectedShares++;
+					}
 					break;
 				} // If not found then Job was obsoleted due to a new Block, do not submit.
 			}
@@ -353,19 +329,15 @@ void StratumClient::process() {
 	constexpr std::size_t bufferSize(4096);
 	char buffer[bufferSize];
 	memset(&buffer, 0, bufferSize);
-	const ssize_t messageLength(recv(_socket, buffer, bufferSize - 1U, 0));
-	if (messageLength <= 0) { // No data received.
-		if (messageLength == 0)
-			logger.log("Connection closed by the pool.\n"s, MessageType::WARNING);
-		else if (Stella::timeSince(_lastPoolMessageTp) > stratumTimeOut)
+	size_t bytesReceived(0);
+	CURLcode cc(curl_easy_recv(_curl, buffer, bufferSize - 1U, &bytesReceived));
+	if (bytesReceived == 0) { // No data received.
+		if (Stella::timeSince(_lastPoolMessageTp) > stratumTimeOut)
 			logger.log("Received nothing from the pool since a long time, disconnection assumed.\n"s, MessageType::WARNING);
-#ifdef _WIN32
-		else if (WSAGetLastError() != WSAEWOULDBLOCK)
-			logger.log("Error receiving work data from pool, error "s + std::to_string(WSAGetLastError()) + "\n"s, MessageType::ERROR);
-#else
-		else if (errno != EWOULDBLOCK)
+		else if (cc == CURLE_OK)
+			logger.log("Connection closed by the pool.\n"s, MessageType::WARNING);
+		else if (cc != CURLE_AGAIN)
 			logger.log("Error receiving work data from pool: "s + std::strerror(errno) + "\n"s, MessageType::ERROR);
-#endif
 		else // Nothing went wrong, it is expected to get nothing most of the times due to the non blocking socket.
 			return;
 		_socket = -1;

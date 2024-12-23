@@ -124,6 +124,7 @@ class StratumClient : public NetworkedClient {
 	const std::string _username, _password, _host;
 	const uint16_t _port;
 	// Client State Variables
+	CURL *_curl;
 	std::mutex _submitMutex;
 	uint64_t _currentJobId{0}, _shares{0}, _rejectedShares{0};
 	struct Job { // Stratum Job Data/Context
@@ -151,7 +152,7 @@ class StratumClient : public NetworkedClient {
 	
 	void _processMessage(const std::string&); // Processes a message received from the pool
 public:
-	StratumClient(const Options &options) : _username(options.username), _password(options.password), _host(options.host), _port(options.port) {}
+	StratumClient(const Options &options) : _username(options.username), _password(options.password), _host(options.host), _port(options.port), _curl(curl_easy_init()) {}
 	void connect(); // Also sends mining.subscribe
 	void process(); // Get messages from the server and calls _processMessage to handle them
 	std::optional<ClientInfo> info() const;
