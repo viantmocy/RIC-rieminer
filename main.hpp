@@ -17,10 +17,10 @@
 #include "Stella.hpp"
 
 #ifndef versionShort
-	#define versionShort	"0.9x"
+	#define versionShort	"2xxx"
 #endif
 #ifndef versionString
-	#define versionString	"rieMiner 0.9x"
+	#define versionString	"rieMiner 2xxx"
 #endif
 
 static inline std::string timeNowStr() {

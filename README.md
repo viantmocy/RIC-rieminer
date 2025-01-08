@@ -8,22 +8,19 @@ This README is intended for advanced users and will mainly only describe the dif
 
 Happy Mining or Good Luck on finding a new record!
 
-## Minimum requirements
+## Recommended Requirements
 
-* Windows 10 or recent enough Linux;
-* Virtually any usual 32 or 64 bits CPU (should work for any x86 since Pentium Pro and recent ARMs);
-* 512 MiB of RAM (the prime table limit must be manually set at a lower value in the options);
-* We only provide binaries for Windows and Linux x64. In the other cases, you must have access to an appropriate build environment and compile yourself the code.
+* Windows 11 x64 (latest version) or Debian 12 x64
+* AMD Zen 5 Processor (Ryzen 9000) or better, with efficient AVX512 implementation and 8 cores or more
+* 16 GiB of RAM or more
 
-Recommended:
+We only provide binaries for Windows x64 and Linux x64 + Arm64. In other situations, you are on your own, and must have access to an appropriate build environment and compile yourself the code, as well as find out yourself which modifications might be required for an older version.
 
-* Windows 11 (latest version) or Debian 11;
-* Recent x64 with AVX2 (Intel Haswell, AMD Zen2, or better), with 8 cores or more;
-* 8 GiB (16 if using more than 8 cores) of RAM or more.
+Memory usage can be reduced using the PrimeTableLimit option.
 
 ## Compile this program
 
-rieMiner should be compilable on recent Linuxes. Building on another system is not supported, and Debian 11 Amd64 is our reference OS. It should be used for cross compiling in order to generate binaries for other systems, that can be distributed. If you don't have Debian 11, you can install it in a virtual machine, as Dual Boot, or in a spare machine.
+rieMiner should be compilable on recent Linuxes. Building on another system is not supported, and Debian 12 Amd64 is our reference OS. It should be used for cross compiling in order to generate binaries for other systems, that can be distributed. If you do not have Debian 12, you can install it in a virtual machine, as Dual Boot, or in a spare machine.
 
 ### Native building
 
@@ -32,7 +29,6 @@ Here is how to build rieMiner to run it directly on the same computer. Libraries
 You will need g++, as, m4, make, and the following dependencies:
 
 * [GMP](https://gmplib.org/)
-* [libSSL](https://www.openssl.org/)
 * [cURL](https://curl.haxx.se/)
 * [NLohmann Json](https://json.nlohmann.me/)
 
@@ -44,19 +40,19 @@ apt install g++ make m4 git libgmp-dev libssl-dev libcurl4-openssl-dev nlohmann-
 And on an Arch based distribution:
 
 ```bash
-pacman -S gcc make m4 git gmp openssl curl nlohmann-json
+pacman -S gcc make m4 git gmp curl nlohmann-json
 ```
 
 For Apple Silicon:
 
 ```bash
-brew install gcc make m4 git gmp openssl@1.1 curl nlohmann-json
+brew install gcc make m4 git gmp curl nlohmann-json
 ```
 
 Then, download the source files, go/`cd` to the directory:
 
 ```bash
-git clone https://github.com/Pttn/rieMiner.git
+git clone https://github.com/RiecoinTeam/rieMiner.git
 cd rieMiner
 ```
 
@@ -75,12 +71,12 @@ For other Linux, executing equivalent commands (using `pacman` instead of `apt`,
 
 ### Static/Cross Compiling
 
-To generage binaries that can be distributed, cross compiling is done on Debian 11 Amd64. This statically links the libraries and the compiler does not optimize for a particular processor. Here is how you can do it yourself.
+To generate binaries that can be distributed, cross compiling is done on Debian 12 Amd64. This statically links the libraries and the compiler does not optimize for a particular processor. Here is how you can do it yourself.
 
-Firstly, make sure that you are running Debian 11 x64. You may need to install some basic tools,
+Firstly, make sure that you are running Debian 12 x64. You may need to install some basic tools,
 
 ```bash
-apt install make m4 git wget lzip
+apt install make m4 git wget
 ```
 
 You will also need appropriate compilers depending on the target system, use this table to find out what to install.
@@ -92,25 +88,23 @@ You will also need appropriate compilers depending on the target system, use thi
 | Linux Arm64   | `g++-aarch64-linux-gnu`       |
 | Android Arm64 | not in repository, see below  |
 
-
 Now, get the rieMiner's source code.
 
 ```bash
-git clone https://github.com/Pttn/rieMiner.git
+git clone https://github.com/RiecoinTeam/rieMiner.git
 cd rieMiner
 ```
 
-A script that retrieves the dependencies' source codes from Riecoin.dev and compiles them is provided. Run the script with
+A script that retrieves the dependencies' source codes from Riecoin.xyz and compiles them is provided. Run the script with
 
 ```bash
 sh GetDependencies.sh
 ```
 
-A folder named `rieMiner0.93aDeps` must have appeared. We assume that you are in it when starting a subsection below.
-
+A folder named `rieMiner2501Deps` must have appeared. We assume that you are in it when starting a subsection below.
 
 ```bash
-cd rieMiner0.94Deps
+cd rieMiner2501Deps
 ```
 
 If you are going to compile for several systems, doing `make clean`s in the rieMiner's directory will be very useful between builds (it will not delete rieMiner binaries). If you already built the dependencies once, you can usually reuse existing `incs` and `libs` folders and skip several steps, though the dependencies may be updated once a while on Riecoin.dev.
@@ -278,10 +272,6 @@ This work is released under the MIT license, except the modified GMP code which 
 * [Michael Bell](https://github.com/MichaelBell/): assembly optimizations, improvements of work management between threads, and some more.
 
 [More Contributors](https://github.com/Pttn/rieMiner/graphs/contributors)
-
-### Versioning
-
-The version naming scheme is 0.9, 0.99, 0.999 and so on for major versions, analogous to 1.0, 2.0, 3.0,.... The first non 9 decimal digit is minor, etc. For example, the version 0.9925a can be thought as 2.2.5a. A perfect bug-free software will be version 1. No precise criteria have been decided about incrementing major or minor versions for now.
 
 ## Contributing
 

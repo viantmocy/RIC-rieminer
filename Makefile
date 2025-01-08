@@ -1,4 +1,4 @@
-VER    = 0.94ES
+VER    = 2501
 CXX    = g++
 M4     = m4
 AS     = as
@@ -91,7 +91,7 @@ rieMinerWin64: main.o Stella.o StratumClient.o GBTClient.o Client.o API.o tools.
 	$(CXX) $(CFLAGS) -o rieMiner $^ $(LIBS)
 
 main.o: main.cpp main.hpp Stella.hpp Client.hpp tools.hpp
-	$(CXX) $(CFLAGS) -c -o $@ -DversionShort=\"$(VER)\" -DversionString=\"rieMiner$(VER)\" main.cpp
+	$(CXX) $(CFLAGS) -c -o $@ -DversionShort=\"$(VER)\" -DversionString=\"rieMiner\ $(VER)\" main.cpp
 
 Stella.o: Stella.cpp Stella.hpp
 	$(CXX) $(CFLAGS) -c -o $@ Stella.cpp
