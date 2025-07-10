@@ -15,7 +15,7 @@
 // Decodes the nBits field from a Block Header
 double decodeBits(const uint32_t, const int32_t);
 
-std::array<uint8_t, 32> encodedOffset(const Stella::Result&);
+std::array<uint8_t, 32> encodedOffset(const Stella::Result&, const uint16_t);
 
 // Riecoin Block Header structure, total 896 bits/112 bytes (224 hex chars)
 struct BlockHeader { // The fields are named according to the GetBlockTemplate labels
@@ -28,8 +28,7 @@ struct BlockHeader { // The fields are named according to the GetBlockTemplate l
 	
 	BlockHeader() : version(0), previousblockhash{0}, merkleRoot{0}, curtime(0), bits(0), nOffset{0} {}
 	std::vector<uint8_t> toV8() const;
-	mpz_class target(const int32_t) const;
-	mpz_class targetOffsetMax(const int32_t) const;
+	mpz_class target(const int32_t, const uint16_t) const;
 };
 
 // Client or Network Parameters/Context
@@ -74,6 +73,7 @@ class GBTClient : public NetworkedClient {
 	const std::vector<std::string> _rules;
 	const std::string _host, _url, _proxy, _cookie;
 	std::string _credentials;
+	const uint16_t _difficultyOffset;
 	const std::vector<uint8_t> _scriptPubKey;
 	// Client State Variables
 	CURL *_curl;
@@ -107,6 +107,7 @@ public:
 		_proxy(options.proxy),
 		_cookie(options.cookie),
 		_credentials(options.username + ":" + options.password),
+		_difficultyOffset(options.difficultyOffset),
 		_scriptPubKey(bech32ToScriptPubKey(options.payoutAddress)),
 		_curl(curl_easy_init()) {}
 	void connect();
@@ -123,7 +124,7 @@ public:
 class StratumClient : public NetworkedClient {
 	// Options
 	const std::string _username, _password, _host, _proxy;
-	const uint16_t _port;
+	const uint16_t _port, _difficultyOffset;
 	// Client State Variables
 	CURL *_curl;
 	std::mutex _submitMutex;
@@ -153,7 +154,7 @@ class StratumClient : public NetworkedClient {
 	
 	void _processMessage(const std::string&); // Processes a message received from the pool
 public:
-	StratumClient(const Options &options) : _username(options.username), _password(options.password), _host(options.host), _proxy(options.proxy), _port(options.port), _curl(curl_easy_init()) {}
+	StratumClient(const Options &options) : _username(options.username), _password(options.password), _host(options.host), _proxy(options.proxy), _port(options.port), _difficultyOffset(options.difficultyOffset), _curl(curl_easy_init()) {}
 	void connect(); // Also sends mining.subscribe
 	void process(); // Get messages from the server and calls _processMessage to handle them
 	std::optional<ClientInfo> info() const;

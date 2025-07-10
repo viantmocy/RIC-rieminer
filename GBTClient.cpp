@@ -4,7 +4,7 @@
 #include "Stella.hpp"
 #include "main.hpp"
 
-const std::string cbMsg("/rM51/");
+const std::string cbMsg("/rM57/");
 static std::vector<uint8_t> coinbaseGen(const std::vector<uint8_t> &scriptPubKey, const uint32_t height, const uint64_t coinbasevalue, const std::vector<uint8_t> &dwc) {
 	std::vector<uint8_t> coinbase;
 	// Version (01000000)
@@ -238,7 +238,7 @@ void GBTClient::process() {
 				if (job.id == block.jobId) { // Sends a pending result via submitblock
 					logger.log("Submitting block with "s + std::to_string(job.txCount) + " transaction(s) (including coinbase)...\n"s, MessageType::BOLD);
 					BlockHeader bh(job.bh);
-					bh.nOffset = encodedOffset(block);
+					bh.nOffset = encodedOffset(block, _difficultyOffset);
 					std::ostringstream oss;
 					oss << v8ToHexStr(bh.toV8());
 					// Variable Length Integer Format
@@ -298,7 +298,7 @@ std::optional<Stella::Job> GBTClient::getJob() {
 	else
 		_currentJobs.push_back(job);
 	stellaJob.id = _currentJobId;
-	stellaJob.target = job.bh.target(_currentJobTemplate.clientInfo->powVersion);
+	stellaJob.target = job.bh.target(_currentJobTemplate.clientInfo->powVersion, _difficultyOffset);
 	_currentJobId++;
 	return stellaJob;
 }

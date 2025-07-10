@@ -43,6 +43,7 @@ struct Options {
 	uint16_t port{28332U};
 	double refreshInterval{30.}, difficulty{1024.}, benchmarkBlockInterval{150.}, benchmarkTimeLimit{960.};
 	uint64_t benchmarkPrimeCountLimit{10000000};
+	uint16_t difficultyOffset{0U};
 	double restartDifficultyFactor{1.03};
 	std::vector<std::string> rules{};
 	uint16_t apiPort{0U};

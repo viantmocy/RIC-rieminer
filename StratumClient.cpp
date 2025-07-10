@@ -5,7 +5,7 @@
 #include "Client.hpp"
 #include "Stella.hpp"
 
-constexpr const char* userAgent("rieMiner/2501");
+constexpr const char* userAgent("rieMiner/2507");
 
 static std::array<uint8_t, 32> calculateMerkleRootStratum(const std::vector<std::array<uint8_t, 32>> &merkleBranches) {
 	std::array<uint8_t, 32> merkleRoot{};
@@ -312,7 +312,7 @@ void StratumClient::process() {
 						<< job.jobId << "\", \""
 						<< v8ToHexStr(job.extraNonce2) << "\", \""
 						<< std::setfill('0') << std::setw(16) << std::hex << job.bh.curtime << "\", \""
-						<< v8ToHexStr(reverse(a8ToV8(encodedOffset(share)))) << "\"]}\n";
+						<< v8ToHexStr(reverse(a8ToV8(encodedOffset(share, _difficultyOffset)))) << "\"]}\n";
 					logger.logDebug("Sending: "s + oss.str());
 					size_t bytesSent(0);
 					CURLcode cc(curl_easy_send(_curl, oss.str().c_str(), oss.str().size(), &bytesSent));
@@ -393,7 +393,7 @@ std::optional<Stella::Job> StratumClient::getJob() {
 	else
 		_currentJobs.push_back(job);
 	stellaJob.id = _currentJobId;
-	stellaJob.target = job.bh.target(_currentJobTemplate.clientInfo->powVersion);
+	stellaJob.target = job.bh.target(_currentJobTemplate.clientInfo->powVersion, _difficultyOffset);
 	_currentJobId++;
 	return stellaJob;
 }

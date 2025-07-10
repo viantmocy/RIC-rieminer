@@ -134,6 +134,11 @@ bool Configuration::parse(const int argc, char** argv, std::string &parsingMessa
 			try {_options.stellaConfig.sieveIterations = std::stoi(value);}
 			catch (...) {_options.stellaConfig.sieveIterations = 0;}
 		}
+		else if (key == "DifficultyOffset") {
+			try {_options.difficultyOffset = std::stoi(value);}
+			catch (...) {_options.difficultyOffset = 0U;}
+			if (_options.difficultyOffset > 2047U) _options.difficultyOffset = 2047U;
+		}
 		else if (key == "RestartDifficultyFactor") {
 			try {_options.restartDifficultyFactor = std::stod(value);}
 			catch (...) {_options.restartDifficultyFactor = 1.03;}
@@ -365,6 +370,8 @@ int main(int argc, char** argv) {
 			if (configuration.options().rules.size() > 0)
 				logger.log("Consensus Rules: "s + Stella::formatContainer(configuration.options().rules) + "\n"s);
 		}
+		if (configuration.options().difficultyOffset != 0)
+			std::cout << "Difficulty Offset " << configuration.options().difficultyOffset << " (+ " << 32*configuration.options().difficultyOffset << ")" << std::endl;
 		logger.log("Auto retune when the Difficulty varies by a factor "s + Stella::doubleToString(configuration.options().restartDifficultyFactor) + "\n"s);
 	}
 	if (configuration.options().refreshInterval > 0.)
@@ -448,7 +455,7 @@ int main(int argc, char** argv) {
 				stellaInstance->addJob(job.value());
 				stellaInstance->startThreads();
 				logger.hr();
-				logger.log(Stella::formattedClockTimeNow() + " Started mining at block "s + std::to_string(clientInfo->height) + ", difficulty "s + Stella::doubleToString(clientInfo->difficulty, 3U)  + "\n"s, MessageType::BOLD);
+				logger.log(Stella::formattedClockTimeNow() + " Started mining at block "s + std::to_string(clientInfo->height) + ", difficulty "s + Stella::doubleToString(clientInfo->difficulty + 32U*configuration.options().difficultyOffset, 3U)  + (32U*configuration.options().difficultyOffset > 0U ? " (offset +"s + std::to_string(32U*configuration.options().difficultyOffset) + ")"s : ""s)+ "\n"s, MessageType::BOLD);
 				timer = std::chrono::steady_clock::now();
 				continue;
 			}
@@ -465,7 +472,7 @@ int main(int argc, char** argv) {
 				tupleCountsRecent[countsRecentEntryPos] = std::make_pair(std::chrono::steady_clock::now(), stellaInstance->getTupleCounts());
 				// Notify the event
 				logger.log(Stella::formattedClockTimeNow());
-				logger.log(" Block "s + std::to_string(currentHeight) + ", average "s + Stella::doubleToString(averageBlockTime, 1) + " s, difficulty "s + Stella::doubleToString(clientInfo->difficulty, 3) + "\n"s);
+				logger.log(" Block "s + std::to_string(currentHeight) + ", average "s + Stella::doubleToString(averageBlockTime, 1) + " s, difficulty "s + Stella::doubleToString(clientInfo->difficulty + 32U*configuration.options().difficultyOffset, 3U)  + (32U*configuration.options().difficultyOffset > 0U ? " (offset +"s + std::to_string(32U*configuration.options().difficultyOffset) + ")"s : ""s)+ "\n"s);
 				
 				// Restart if needed to retune parameters.
 				if (!stellaInstance->hasAcceptedPatterns(clientInfo->acceptedPatterns)) { // Pattern changed and no longer compatible with the current one.
