@@ -44,7 +44,7 @@ struct Options {
 	double refreshInterval{30.}, difficulty{1024.}, benchmarkBlockInterval{150.}, benchmarkTimeLimit{960.};
 	uint64_t benchmarkPrimeCountLimit{10000000};
 	double restartDifficultyFactor{1.03};
-	std::vector<std::string> rules{"segwit"};
+	std::vector<std::string> rules{};
 	uint16_t apiPort{0U};
 	bool logDebug{true}, keepRunning{false};
 };

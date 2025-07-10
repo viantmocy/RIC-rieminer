@@ -357,18 +357,13 @@ int main(int argc, char** argv) {
 			logger.log("Payout address: "s + configuration.options().payoutAddress + "\n"s);
 			if (scriptPubKey.size() == 0) {
 				logger.log("Invalid payout address! Please check it. Note that only Bech32M addresses are supported.\n"s, MessageType::ERROR);
-				logger.log("If you use a ric1q Address, the Checksum computation has changed. Please upgrade to 24.12+ to see the correct Address.\n"s, MessageType::ERROR);
 				waitForUser();
 				return false;
 			}
 			else
 			logger.log("ScriptPubKey:   "s + v8ToHexStr(scriptPubKey) + "\n"s);
-			logger.log("Consensus rules: "s + Stella::formatContainer(configuration.options().rules) + "\n"s);
-			if (std::find(configuration.options().rules.begin(), configuration.options().rules.end(), "segwit") == configuration.options().rules.end()) {
-				logger.log("'segwit' rule must be present!\n"s, MessageType::ERROR);
-				waitForUser();
-				return false;
-			}
+			if (configuration.options().rules.size() > 0)
+				logger.log("Consensus Rules: "s + Stella::formatContainer(configuration.options().rules) + "\n"s);
 		}
 		logger.log("Auto retune when the Difficulty varies by a factor "s + Stella::doubleToString(configuration.options().restartDifficultyFactor) + "\n"s);
 	}
