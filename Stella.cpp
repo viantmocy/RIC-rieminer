@@ -157,14 +157,16 @@ void Instance::init(const Configuration &configuration) {
 	
 	const auto initialBits(configuration.initialBits);
 	_sieveWorkers = configuration.sieveWorkers;
+	const double primorialLog2Approx(static_cast<double>(configuration.initialTargetBits) - 40.);
 	if (_sieveWorkers == 0) {
-		double proportion;
-		if (_pattern.size() >= 7) proportion = 0.85 - initialBits/1920.;
-		else if (_pattern.size() == 6) proportion = 0.75 - initialBits/1792.;
-		else if (_pattern.size() == 5) proportion = 0.7 - initialBits/1280.;
-		else if (_pattern.size() == 4) proportion = 0.5 - initialBits/1280.;
-		else proportion = 0.;
-		if (proportion < 0.) proportion = 0.;
+		double proportion(0.);
+		if (_pattern.size() >= 10) proportion = std::exp(-0.00053*primorialLog2Approx);
+		else if (_pattern.size() == 9) proportion = std::exp(-0.00065*primorialLog2Approx);
+		else if (_pattern.size() == 8) proportion = std::exp(-0.00088*primorialLog2Approx);
+		else if (_pattern.size() == 7) proportion = std::exp(-0.0013*primorialLog2Approx);
+		else if (_pattern.size() == 6) proportion = std::exp(-0.0021*primorialLog2Approx);
+		else if (_pattern.size() == 5) proportion = std::exp(-0.0037*primorialLog2Approx);
+		else if (_pattern.size() == 4) proportion = std::exp(-0.0059*primorialLog2Approx);
 		if (proportion > 1.) proportion = 1.;
 		_sieveWorkers = std::ceil(proportion*static_cast<double>(_threads));
 	}
@@ -175,14 +177,16 @@ void Instance::init(const Configuration &configuration) {
 	
 	_primeTableLimit = configuration.primeTableLimit;
 	if (_primeTableLimit == 0) {
-		uint64_t primeTableLimitMax(2147483648ULL);
-		if (sysInfo.getPhysicalMemory() < 536870912ULL)
+		uint64_t primeTableLimitMax(4294967296ULL);
+		if (sysInfo.getPhysicalMemory() == 0ULL) // Could not detect Ram, reasonable default for a machine with 4 GiB.
+			primeTableLimitMax = 1073741824ULL;
+		else if (sysInfo.getPhysicalMemory() < 536870912ULL) // A Vintage Computer, maybe...
 			primeTableLimitMax = 67108864ULL;
-		else if (sysInfo.getPhysicalMemory() < 17179869184ULL)
+		else if (sysInfo.getPhysicalMemory() < 34359738368ULL)
 			primeTableLimitMax = sysInfo.getPhysicalMemory()/8ULL;
 		_primeTableLimit = std::pow(initialBits, 6.)/std::pow(2., 3.*static_cast<double>(_pattern.size()) + 7.);
-		if (_threads > 16) {
-			_primeTableLimit *= 16;
+		if (_threads > 32) {
+			_primeTableLimit *= 32;
 			_primeTableLimit /= static_cast<double>(_threads);
 		}
 		_primeTableLimit = std::min(_primeTableLimit, primeTableLimitMax);
