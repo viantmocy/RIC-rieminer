@@ -427,8 +427,8 @@ int main(int argc, char** argv) {
 				stellaConfig.patternMin = clientInfo->patternMin;
 				stellaConfig.primeCountTarget = clientInfo->primeCountTarget;
 				stellaConfig.primeCountMin = clientInfo->primeCountMin;
-				stellaConfig.initialBits = clientInfo->difficulty;
-				stellaConfig.initialTargetBits = clientInfo->targetOffsetBits - std::ceil(stellaConfig.initialBits*(configuration.options().restartDifficultyFactor - 1.)); // Margin to take in account the Difficulty fluctuations
+				stellaConfig.initialBits = clientInfo->difficulty + 32*configuration.options().difficultyOffset;
+				stellaConfig.initialTargetBits = clientInfo->targetOffsetBits + 32*configuration.options().difficultyOffset - std::ceil(stellaConfig.initialBits*(configuration.options().restartDifficultyFactor - 1.)); // Margin to take in account the Difficulty fluctuations
 				logger.log("Initializing Stella Instance...\n"s);
 				stellaInstance->init(stellaConfig);
 				if (!stellaInstance->inited()) {
