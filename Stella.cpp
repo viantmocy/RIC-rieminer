@@ -1321,7 +1321,7 @@ std::string formattedClockTimeNow() {
 	const auto seconds(std::chrono::time_point_cast<std::chrono::seconds>(now));
 	const auto milliseconds(std::chrono::duration_cast<std::chrono::milliseconds>(now - seconds));
 	const std::time_t timeT(std::chrono::system_clock::to_time_t(now));
-	const std::tm *timeTm(std::localtime(&timeT));
+	const std::tm *timeTm(std::gmtime(&timeT));
 	std::ostringstream oss;
 	oss << "[" << std::put_time(timeTm, "%b %d %H:%M:%S") << "." << static_cast<uint32_t>(std::floor(milliseconds.count()))/100 << "]";
 	return oss.str();
