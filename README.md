@@ -95,32 +95,27 @@ git clone https://github.com/RiecoinTeam/rieMiner.git
 cd rieMiner
 ```
 
-A script that retrieves the dependencies' source codes from Riecoin.xyz and compiles them is provided. Run the script with
+#### Get Dependencies
+
+Retrieve the dependencies' source codes by running the `GetDeps.sh` script,
 
 ```bash
-sh GetDependencies.sh
+sh GetDeps.sh
 ```
 
-A folder named `rieMiner2501Deps` must have appeared. We assume that you are in it when starting a subsection below.
+A folder named `rieMinerDeps` must have appeared.
+
+#### Build Dependencies for Windows x64, Linux x64, or Linux Arm64
+
+Now, use the `BuildDeps.sh` script to build the dependencies. This takes an argument for the target operating system, `Win64` or `Deb64`. For example,
 
 ```bash
-cd rieMiner2501Deps
+sh BuildDeps.sh Win64
 ```
 
-If you are going to compile for several systems, doing `make clean`s in the rieMiner's directory will be very useful between builds (it will not delete rieMiner binaries). If you already built the dependencies once, you can usually reuse existing `incs` and `libs` folders and skip several steps, though the dependencies may be updated once a while on Riecoin.dev.
+In this example, the `incsWin64` and `libsWin64` folders must have appeared.
 
-#### For Windows x64, Linux x64, or Linux Arm64
-
-Here are the instructions to generate a binary for Windows x64. Just a few adaptations are needed for other systems. In the dependencies folder, build them by doing
-
-
-```bash
-sh Build.sh Win64
-```
-
-The `incsWin64` and `libsWin64` folders must have appeared next to the dependencies folder (they will have another suffix when building dependencies for other systems).
-
-Now, build rieMiner itself.
+Finally, build rieMiner itself.
 
 ```bash
 cd ..
@@ -133,7 +128,19 @@ For Linux x64, do the same steps, but with `Deb64` or `Deb64AVX2` instead of `Wi
 
 For Linux Arm64, use `Arm64` instead of `Win64`.
 
-#### For Android Arm64
+If you are going to compile for several systems, doing `make clean`s in the rieMiner's directory will be very useful between builds (it will not delete rieMiner binaries). For example, once you have built the dependencies for `Win64`, `Deb64`, and `Arm64`, you can do
+
+```bash
+make clean ; make Win64
+make clean ; make Win64AVX2
+make clean ; make Deb64
+make clean ; make Deb64AVX2
+make clean ; make Arm64
+```
+
+Which yields the five expected binaries.
+
+#### Build Dependencies for Android Arm64
 
 Note that this will not produce an Apk file, only a binary that can be launched in something like Termux. There is also no built-in temperature control and you are responsible that the heat does not damage your device.
 
@@ -143,10 +150,10 @@ You should now have an `android-ndk-r25` folder or similar somewhere, remember i
 
 You must now choose your target Android API Level. Each level correspond to a minimum Android version with which an application is compatible, for example API Level 30 corresponds to Android 11. A list can be found [here](https://developer.android.com/studio/releases/platforms). By default, it is set to 26.
 
-Replace accordingly the `export ANDROIDAPI` and `export NDK` lines in the `Build.sh` file. Then, build the dependencies.
+Replace accordingly the `export ANDROIDAPI` and `export NDK` lines in the `BuildDeps.sh` file. Then, build the dependencies.
 
 ```bash
-sh Build.sh And64
+sh BuildDeps.sh And64
 ```
 
 The `incsAnd64` and `libsAnd64` folders must have appeared next to the dependencies folder. You must now adapt the `And64: CXX =` line in the rieMiner's Makefile (outside the dependencies folder) before building rieMiner itself.
