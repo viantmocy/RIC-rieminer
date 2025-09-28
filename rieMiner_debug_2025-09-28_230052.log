@@ -1,0 +1,115 @@
+rieMiner 2507, Riecoin miner by Pttn and contributors
+Project page: https://riecoin.xyz/rieMiner
+Riecoin Whitepaper: https://riecoin.xyz/Whitepaper
+Launch with 'help' as first argument for a quick usage guide
+-----------------------------------------------------------
+Assembly code by Michael Bell (Rockhawk)
+G++ 4.2.1 - https://gcc.gnu.org/
+GMP 6.3.0 - https://gmplib.org/
+PicoSHA2 27fcf69 - https://github.com/okdshin/PicoSHA2
+Curl 8.16.0 - https://curl.haxx.se/
+NLohmann Json 3.12.0 - https://json.nlohmann.me/
+-----------------------------------------------------------
+Build for: Linux on Arm64
+Processor: Unknown Arm64 CPU
+Physical Memory: 7.299 GiB
+-----------------------------------------------------------
+Opening configuration file rieMiner.conf...
+Debug file: rieMiner_debug_2025-09-28_230052.log
+Can be disabled with 'LogDebug = No'.
+Cannot find the delimiter '=' for: '[General]'
+Pooled mining via host ric.suprnova.cc, port 5000
+Username: calfia2211.mwekpocom4
+Password: <4 character(s)>
+Auto retune when the Difficulty varies by a factor 1.03
+Stats refresh interval: 30 s
+Connecting to Riecoin server...
+Host: ric.suprnova.cc -> 5.9.193.21
+Sending: {"id": 0, "method": "mining.subscribe", "params": ["rieMiner/2507"]}
+Received: {"id":0,"result":[[["mining.set_difficulty","00000000000000001010000000000000"],["mining.notify","00000000000000001010000000000000"]],"7ffff827",1],"error":null}
+Successfully subscribed to the pool. Subscriptions:
+	mining.set_difficulty: 00000000000000001010000000000000
+	mining.notify: 00000000000000001010000000000000
+ExtraNonce1    = 7ffff827
+extraNonce2Len = 1
+Received: {"id":null,"method":"mining.set_difficulty","params":[5]}
+{"id":null,"method":"mining.notify","params":["703","3b88428b0b316815c431785371a7eab09127dc5d8add0e26bdf6093bd3bcd147","01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff1a03571f2504b05bd96805","0a2f4e4f4d502d5249432f00000000020000000000000000266a24aa21a9eda919720c82334a0184c9954059f23855b3d66952590fc7511a73b10fe6de9a9b80a4814a000000002251200e4c944197070c46d39f6d2e3d9ecdfb7f49de0a4be51afecc69d4514e18d19900000000",["a89b27923b68bb7390e7c914720a93118b0f31fe645519afbd208b362e5a1785","ac2cf7f5a080064134a487ff9f407a564acb8d541d3302eedc0e00fc8837c147"],"20000000","00041404","68d95bb0",true,1,[[0,2,4,2,4,6,2],[0,2,6,4,2,4,2]]]}
+Received request from pool with unsupported method mining.set_difficulty
+Pool message was: {"id":null,"method":"mining.set_difficulty","params":[5]}Could not get a first job from the pool!
+Connection error, reconnecting in 10 s...
+Host: ric.suprnova.cc -> 5.9.193.21
+Sending: {"id": 0, "method": "mining.subscribe", "params": ["rieMiner/2507"]}
+Received: {"id":0,"result":[[["mining.set_difficulty","00000000000000001010000000000000"],["mining.notify","00000000000000001010000000000000"]],"080007d4",1],"error":null}
+Successfully subscribed to the pool. Subscriptions:
+	mining.set_difficulty: 00000000000000001010000000000000
+	mining.notify: 00000000000000001010000000000000
+ExtraNonce1    = 080007d4
+extraNonce2Len = 1
+Received: {"id":null,"method":"mining.set_difficulty","params":[5]}
+{"id":null,"method":"mining.notify","params":["6fc","3b88428b0b316815c431785371a7eab09127dc5d8add0e26bdf6093bd3bcd147","01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff1a03571f2504b05bd96805","0a2f4e4f4d502d5249432f00000000020000000000000000266a24aa21a9eda919720c82334a0184c9954059f23855b3d66952590fc7511a73b10fe6de9a9b80a4814a000000002251200e4c944197070c46d39f6d2e3d9ecdfb7f49de0a4be51afecc69d4514e18d19900000000",["a89b27923b68bb7390e7c914720a93118b0f31fe645519afbd208b362e5a1785","ac2cf7f5a080064134a487ff9f407a564acb8d541d3302eedc0e00fc8837c147"],"20000000","00041404","68d95bb0",true,1,[[0,2,4,2,4,6,2],[0,2,6,4,2,4,2]]]}
+Received request from pool with unsupported method mining.set_difficulty
+Pool message was: {"id":null,"method":"mining.set_difficulty","params":[5]}Could not get a first job from the pool!
+Connection error, reconnecting in 10 s...
+Host: ric.suprnova.cc -> 5.9.193.21
+Sending: {"id": 0, "method": "mining.subscribe", "params": ["rieMiner/2507"]}
+Received: {"id":0,"result":[[["mining.set_difficulty","00000000000000001010000000000000"],["mining.notify","00000000000000001010000000000000"]],"180007e8",1],"error":null}
+Successfully subscribed to the pool. Subscriptions:
+	mining.set_difficulty: 00000000000000001010000000000000
+	mining.notify: 00000000000000001010000000000000
+ExtraNonce1    = 180007e8
+extraNonce2Len = 1
+Received: {"id":null,"method":"mining.set_difficulty","params":[5]}
+{"id":null,"method":"mining.notify","params":["6e6","3b88428b0b316815c431785371a7eab09127dc5d8add0e26bdf6093bd3bcd147","01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff1a03571f2504b05bd96805","0a2f4e4f4d502d5249432f00000000020000000000000000266a24aa21a9eda919720c82334a0184c9954059f23855b3d66952590fc7511a73b10fe6de9a9b80a4814a000000002251200e4c944197070c46d39f6d2e3d9ecdfb7f49de0a4be51afecc69d4514e18d19900000000",["a89b27923b68bb7390e7c914720a93118b0f31fe645519afbd208b362e5a1785","ac2cf7f5a080064134a487ff9f407a564acb8d541d3302eedc0e00fc8837c147"],"20000000","00041404","68d95bb0",true,1,[[0,2,4,2,4,6,2],[0,2,6,4,2,4,2]]]}
+Received request from pool with unsupported method mining.set_difficulty
+Pool message was: {"id":null,"method":"mining.set_difficulty","params":[5]}Received: {"id":1,"result":true,"error":null}
+Successfully authorized by the pool.
+Accepted constellation pattern(s):
+	0 - 0, 2, 4, 2, 4, 6, 2
+	1 - 0, 2, 6, 4, 2, 4, 2
+None or not compatible one specified, choosing a random one: pattern 0
+Initializing Stella Instance...
+Done. Parameters:
+	Threads: 8 (4 Sieve Worker(s))
+	Constellation pattern: n + (0, 2, 6, 8, 12, 18, 20), length 7
+	Prime Table: 49864764 entries, largest 979651513
+		Generated in 6.525071 s
+		Modular Inverses/Division Data generated in 3.529752 s
+	Primorial: p99# = 523# = ~8.709668761379*10^216 (721 bits)
+	Sieve Size: 2^23 = 8388608 (131072 words)
+	Sieve Iterations: 16
+	Primorial Factor Max: 134217728
+	Primorial Offsets: 92 entries
+	Prime index threshold: 7603552
+-----------------------------------------------------------
+[Sep 28 16:01:27.6] Started mining at block 2432855, difficulty 1044.016
+Received: {"id":null,"method":"mining.notify","params":["6e7","3b88428b0b316815c431785371a7eab09127dc5d8add0e26bdf6093bd3bcd147","01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff1a03571f2504ce5bd96805","0a2f4e4f4d502d5249432f00000000020000000000000000266a24aa21a9eda919720c82334a0184c9954059f23855b3d66952590fc7511a73b10fe6de9a9b80a4814a000000002251200e4c944197070c46d39f6d2e3d9ecdfb7f49de0a4be51afecc69d4514e18d19900000000",["a89b27923b68bb7390e7c914720a93118b0f31fe645519afbd208b362e5a1785","ac2cf7f5a080064134a487ff9f407a564acb8d541d3302eedc0e00fc8837c147"],"20000000","00041404","68d95bce",false,1,[[0,2,4,2,4,6,2],[0,2,6,4,2,4,2]]]}
+[Sep 28 16:01:44.1] 5-share found by worker thread 3
+Sending: {"id": 2, "method": "mining.submit", "params": ["calfia2211.mwekpocom4", "6e6", "b8", "0000000068d95bb0", "00630000000000000000000000000120bd5c0000000000006828191122d30002"]}
+Received: {"id":2,"result":true,"error":null}
+Received: {"id":null,"method":"mining.notify","params":["6e8","3b88428b0b316815c431785371a7eab09127dc5d8add0e26bdf6093bd3bcd147","01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff1a03571f2504ec5bd96805","0a2f4e4f4d502d5249432f00000000020000000000000000266a24aa21a9eda919720c82334a0184c9954059f23855b3d66952590fc7511a73b10fe6de9a9b80a4814a000000002251200e4c944197070c46d39f6d2e3d9ecdfb7f49de0a4be51afecc69d4514e18d19900000000",["a89b27923b68bb7390e7c914720a93118b0f31fe645519afbd208b362e5a1785","ac2cf7f5a080064134a487ff9f407a564acb8d541d3302eedc0e00fc8837c147"],"20000000","00041404","68d95bec",false,1,[[0,2,4,2,4,6,2],[0,2,6,4,2,4,2]]]}
+[Sep 28 16:01:57.6] 1.4 RIC/d (1645.5 c/s, r 19.95), Sh: 1/1 (100.00%)
+Received: {"id":null,"method":"mining.notify","params":["6e9","c2496dda51b563e47a6346319c261d9bd7e5afcdbbe965ce8f261ef1d7b83083","01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff1a03581f2504005cd96805","0a2f4e4f4d502d5249432f00000000020000000000000000266a24aa21a9ede2f61c3f71d1defd3fa999dfa36953755c690689799962b48bebd836974e8cf9807c814a000000002251200e4c944197070c46d39f6d2e3d9ecdfb7f49de0a4be51afecc69d4514e18d19900000000",[],"20000000","00041455","68d95c00",true,1,[[0,2,4,2,4,6,2],[0,2,6,4,2,4,2]]]}
+[Sep 28 16:02:08.1] Block 2432856, average 40.5 s, difficulty 1044.332
+[Sep 28 16:02:27.6] 1.5 RIC/d (1518.5 c/s, r 19.64), Sh: 1/1 (100.00%)
+Received: {"id":null,"method":"mining.notify","params":["6ea","c2496dda51b563e47a6346319c261d9bd7e5afcdbbe965ce8f261ef1d7b83083","01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff1a03581f25041e5cd96805","0a2f4e4f4d502d5249432f00000000020000000000000000266a24aa21a9ede2f61c3f71d1defd3fa999dfa36953755c690689799962b48bebd836974e8cf9807c814a000000002251200e4c944197070c46d39f6d2e3d9ecdfb7f49de0a4be51afecc69d4514e18d19900000000",[],"20000000","00041455","68d95c1e",false,1,[[0,2,4,2,4,6,2],[0,2,6,4,2,4,2]]]}
+[Sep 28 16:02:57.6] 1.9 RIC/d (1787.2 c/s, r 19.41), Sh: 1/1 (100.00%)
+Received: {"id":null,"method":"mining.notify","params":["6eb","d1dd7e11038d2c01ba579e66b003ef07299e94218d306fbc0aba30f1e2f4ae9f","01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff1a03591f2504375cd96805","0a2f4e4f4d502d5249432f00000000020000000000000000266a24aa21a9ede2f61c3f71d1defd3fa999dfa36953755c690689799962b48bebd836974e8cf9807c814a000000002251200e4c944197070c46d39f6d2e3d9ecdfb7f49de0a4be51afecc69d4514e18d19900000000",[],"20000000","00041572","68d95c37",true,1,[[0,2,4,2,4,6,2],[0,2,6,4,2,4,2]]]}
+[Sep 28 16:03:02.7] Block 2432857, average 47.5 s, difficulty 1045.445
+[Sep 28 16:03:27.6] 1.7 RIC/d (1626.3 c/s, r 19.34), Sh: 1/1 (100.00%)
+Received: {"id":null,"method":"mining.notify","params":["6ec","d1dd7e11038d2c01ba579e66b003ef07299e94218d306fbc0aba30f1e2f4ae9f","01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff1a03591f2504555cd96805","0a2f4e4f4d502d5249432f00000000020000000000000000266a24aa21a9ede2f61c3f71d1defd3fa999dfa36953755c690689799962b48bebd836974e8cf9807c814a000000002251200e4c944197070c46d39f6d2e3d9ecdfb7f49de0a4be51afecc69d4514e18d19900000000",[],"20000000","00041572","68d95c55",false,1,[[0,2,4,2,4,6,2],[0,2,6,4,2,4,2]]]}
+[Sep 28 16:03:57.6] 1.8 RIC/d (1706.0 c/s, r 19.43), Sh: 1/1 (100.00%)
+Received: {"id":null,"method":"mining.notify","params":["6ed","d1dd7e11038d2c01ba579e66b003ef07299e94218d306fbc0aba30f1e2f4ae9f","01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff1a03591f2504735cd96805","0a2f4e4f4d502d5249432f00000000020000000000000000266a24aa21a9ede2f61c3f71d1defd3fa999dfa36953755c690689799962b48bebd836974e8cf9807c814a000000002251200e4c944197070c46d39f6d2e3d9ecdfb7f49de0a4be51afecc69d4514e18d19900000000",[],"20000000","00041572","68d95c73",false,1,[[0,2,4,2,4,6,2],[0,2,6,4,2,4,2]]]}
+[Sep 28 16:04:27.6] 2.0 RIC/d (2001.1 c/s, r 19.51), Sh: 1/1 (100.00%)
+Received: {"id":null,"method":"mining.notify","params":["6ee","d1dd7e11038d2c01ba579e66b003ef07299e94218d306fbc0aba30f1e2f4ae9f","01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff1a03591f2504915cd96805","0a2f4e4f4d502d5249432f00000000020000000000000000266a24aa21a9ede2f61c3f71d1defd3fa999dfa36953755c690689799962b48bebd836974e8cf9807c814a000000002251200e4c944197070c46d39f6d2e3d9ecdfb7f49de0a4be51afecc69d4514e18d19900000000",[],"20000000","00041572","68d95c91",false,1,[[0,2,4,2,4,6,2],[0,2,6,4,2,4,2]]]}
+[Sep 28 16:04:57.7] 2.0 RIC/d (2003.9 c/s, r 19.54), Sh: 1/1 (100.00%)
+Received: {"id":null,"method":"mining.notify","params":["6ef","63b7093bc4226640021ca58b72d672415b52e391f01d8c364b013bb1b16d94aa","01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff1a035a1f2504ac5cd96805","0a2f4e4f4d502d5249432f00000000020000000000000000266a24aa21a9ede2f61c3f71d1defd3fa999dfa36953755c690689799962b48bebd836974e8cf9807c814a000000002251200e4c944197070c46d39f6d2e3d9ecdfb7f49de0a4be51afecc69d4514e18d19900000000",[],"20000000","00041677","68d95cac",true,1,[[0,2,4,2,4,6,2],[0,2,6,4,2,4,2]]]}
+[Sep 28 16:05:00.3] Block 2432858, average 70.9 s, difficulty 1046.465
+[Sep 28 16:05:27.7] 1.9 RIC/d (1907.8 c/s, r 19.59), Sh: 1/1 (100.00%)
+Received: {"id":null,"method":"mining.notify","params":["6f0","63b7093bc4226640021ca58b72d672415b52e391f01d8c364b013bb1b16d94aa","01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff1a035a1f2504ca5cd96805","0a2f4e4f4d502d5249432f00000000020000000000000000266a24aa21a9ede2f61c3f71d1defd3fa999dfa36953755c690689799962b48bebd836974e8cf9807c814a000000002251200e4c944197070c46d39f6d2e3d9ecdfb7f49de0a4be51afecc69d4514e18d19900000000",[],"20000000","00041677","68d95cca",false,1,[[0,2,4,2,4,6,2],[0,2,6,4,2,4,2]]]}
+[Sep 28 16:05:57.7] 1.9 RIC/d (1958.4 c/s, r 19.62), Sh: 1/1 (100.00%)
+Received: {"id":null,"method":"mining.notify","params":["6f1","63b7093bc4226640021ca58b72d672415b52e391f01d8c364b013bb1b16d94aa","01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff1a035a1f2504e85cd96805","0a2f4e4f4d502d5249432f00000000020000000000000000266a24aa21a9ede2f61c3f71d1defd3fa999dfa36953755c690689799962b48bebd836974e8cf9807c814a000000002251200e4c944197070c46d39f6d2e3d9ecdfb7f49de0a4be51afecc69d4514e18d19900000000",[],"20000000","00041677","68d95ce8",false,1,[[0,2,4,2,4,6,2],[0,2,6,4,2,4,2]]]}
+Received: {"id":null,"method":"mining.notify","params":["6f2","5cc8e1fa28d317fd2ecf0ef66b9c9125fb30fee231e49edb9031278e78a63e7f","01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff1a035b1f2504f55cd96805","0a2f4e4f4d502d5249432f00000000020000000000000000266a24aa21a9ede2f61c3f71d1defd3fa999dfa36953755c690689799962b48bebd836974e8cf9807c814a000000002251200e4c944197070c46d39f6d2e3d9ecdfb7f49de0a4be51afecc69d4514e18d19900000000",[],"20000000","0004172e","68d95cf5",true,1,[[0,2,4,2,4,6,2],[0,2,6,4,2,4,2]]]}
+[Sep 28 16:06:12.9] Block 2432859, average 71.3 s, difficulty 1047.180
+[Sep 28 16:06:27.7] 1.8 RIC/d (1839.8 c/s, r 19.65), Sh: 1/1 (100.00%)
+
+Signal 2 received, stopping rieMiner.

@@ -1,0 +1,41 @@
+rieMiner 2507, Riecoin miner by Pttn and contributors
+Project page: https://riecoin.xyz/rieMiner
+Riecoin Whitepaper: https://riecoin.xyz/Whitepaper
+Launch with 'help' as first argument for a quick usage guide
+-----------------------------------------------------------
+Assembly code by Michael Bell (Rockhawk)
+G++ 4.2.1 - https://gcc.gnu.org/
+GMP 6.3.0 - https://gmplib.org/
+PicoSHA2 27fcf69 - https://github.com/okdshin/PicoSHA2
+Curl 8.16.0 - https://curl.haxx.se/
+NLohmann Json 3.12.0 - https://json.nlohmann.me/
+-----------------------------------------------------------
+Build for: Linux on Arm64
+Processor: Unknown Arm64 CPU
+Physical Memory: 7.299 GiB
+-----------------------------------------------------------
+Opening configuration file rieMiner.conf...
+Debug file: rieMiner_debug_2025-09-28_231239.log
+Can be disabled with 'LogDebug = No'.
+Cannot find the delimiter '=' for: '[General]'
+Pooled mining via host ric.suprnova.cc, port 5000
+Username: calfia2211.mwekpocom4
+Password: <4 character(s)>
+Auto retune when the Difficulty varies by a factor 1.03
+Stats refresh interval: 30 s
+Connecting to Riecoin server...
+Host: ric.suprnova.cc -> 5.9.193.21
+Sending: {"id": 0, "method": "mining.subscribe", "params": ["rieMiner/2507"]}
+Received: {"id":0,"result":[[["mining.set_difficulty","00000000000000001210000000000000"],["mining.notify","00000000000000001210000000000000"]],"77fff83e",1],"error":null}
+Successfully subscribed to the pool. Subscriptions:
+	mining.set_difficulty: 00000000000000001210000000000000
+	mining.notify: 00000000000000001210000000000000
+ExtraNonce1    = 77fff83e
+extraNonce2Len = 1
+Received: {"id":null,"method":"mining.set_difficulty","params":[5]}
+{"id":null,"method":"mining.notify","params":["735","0aa15c14d769f64f52e264b266effed4ca6e047c53d172303621a81d69cfbcfc","01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff1a035c1f25046c5ed96805","0a2f4e4f4d502d5249432f00000000020000000000000000266a24aa21a9ede2f61c3f71d1defd3fa999dfa36953755c690689799962b48bebd836974e8cf9807c814a000000002251200e4c944197070c46d39f6d2e3d9ecdfb7f49de0a4be51afecc69d4514e18d19900000000",[],"20000000","00041790","68d95e6c",false,1,[[0,2,4,2,4,6,2],[0,2,6,4,2,4,2]]]}
+Received request from pool with unsupported method mining.set_difficulty
+Pool message was: {"id":null,"method":"mining.set_difficulty","params":[5]}Could not get a first job from the pool!
+Connection error, reconnecting in 10 s...
+
+Signal 2 received, stopping rieMiner.

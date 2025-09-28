@@ -3,7 +3,7 @@ CXX    = g++
 M4     = m4
 AS     = as
 SED    = sed
-CFLAGS = -Wall -Wextra -std=c++17 -O3 -fPIE -pie
+CFLAGS = -Wall -Wextra -std=c++17 -O3 -fno-pie -no-pie
 LIBS   = -lcurl -lgmpxx -lgmp
 
 all: native
